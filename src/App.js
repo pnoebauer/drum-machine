@@ -1,11 +1,7 @@
 import React from 'react';
 import './App.css';
 
-// imported library via CDN
-// const marked = window.marked;
-
 const keys = ['Q', 'W', 'E', 'A', 'S', 'D', 'Z', 'X', 'C'];
-// const clips = {Q, W, E, A, S, D, Z, X, C};
 
 const sounds = [
 	'https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3',
@@ -45,16 +41,10 @@ const CreatePad = (triggerKey, id, handleClick) => {
 			onClick={handleClick}
 			key={id}
 		>
-			<div
-				className='px-2 m-3 triggerKey'
-				id={id}
-				style={{padding: '40px', cursor: 'pointer'}}
-			>
+			<div className='px-2 m-3 triggerKey' id={id}>
 				{triggerKey}
 			</div>
-			<audio className='clip' id={triggerKey}>
-				<source src={sounds[id]} />
-			</audio>
+			<audio className='clip' id={triggerKey} src={sounds[id]} />
 		</div>
 	);
 };
@@ -66,36 +56,41 @@ class App extends React.Component {
 	}
 
 	handleKey = event => {
-		console.log(`Key: ${event.key} with keycode ${event.keyCode} has been pressed`);
+		// console.log(`Key: ${event.key} with keycode ${event.keyCode} has been pressed`);
 
+		// the audioElement has an id equal to the trigger key (the key element has -key added)
 		const audioEl = document.getElementById(event.key.toUpperCase());
 		const keyEl = document.getElementById(`${event.key.toUpperCase()}-key`);
 
 		// const keyEl = document.getElementById('0');
-		console.log(audioEl, keyEl, 'aud');
+		// console.log(audioEl, keyEl, 'aud');
 
 		if (audioEl) {
 			audioEl.play();
 
-			console.log(keys.indexOf(event.key.toUpperCase()), 'pos');
-
+			// the array containing the audio source files has the same sorting as the trigger keys array
+			// return the index of the pressed key
 			const soundIndex = Number(keys.indexOf(event.key.toUpperCase()));
+			// return the sound path
 			const fullSoundName = sounds[soundIndex];
+			// remove the path and extension
 			const soundName = retrieveSoundName(fullSoundName);
-			console.log(fullSoundName, retrieveSoundName(fullSoundName));
+			// console.log(fullSoundName, retrieveSoundName(fullSoundName));
 
 			this.setState({activeSound: soundName});
 
+			// add the active class to style the element
 			keyEl.classList.add('drum-pad-active');
 		}
 	};
 
 	handleKeyUp = event => {
-		console.log(`UP Key: ${event.key} with keycode ${event.keyCode} has been pressed`);
+		// console.log(`UP Key: ${event.key} with keycode ${event.keyCode} has been pressed`);
 
 		const keyEl = document.getElementById(`${event.key.toUpperCase()}-key`);
 
 		if (keyEl) {
+			// remove the active class once the key is not pressed anymore
 			keyEl.classList.remove('drum-pad-active');
 		}
 	};
@@ -111,14 +106,15 @@ class App extends React.Component {
 	}
 
 	handleClick = e => {
-		console.log(e.currentTarget.id, 'cl');
-		console.log(e.currentTarget.children[1], e.currentTarget.children[0].id, 'child');
+		// console.log(e.currentTarget.id, 'cl');
+		// console.log(e.currentTarget.children[1], e.currentTarget.children[0].id, 'child');
 
+		// the first child of the clicked drum-pad (which displays the triggerkey) contains the index within the sounds/keys arrays
 		const soundIndex = e.currentTarget.children[0].id;
 
 		const fullSoundName = sounds[soundIndex];
 		const soundName = retrieveSoundName(fullSoundName);
-		console.log(fullSoundName, retrieveSoundName(fullSoundName));
+		// console.log(fullSoundName, retrieveSoundName(fullSoundName));
 
 		this.setState({activeSound: soundName});
 		// const audioEl = document.getElementById(e.currentTarget.id);
@@ -128,16 +124,20 @@ class App extends React.Component {
 	};
 
 	render() {
-		// console.log(this.state);
 		return (
-			<div className='container-fluid bg-dark' id='drum-machine'>
-				<div className='bg-light mx-auto p-2 mt-5'>
-					<div id='display'>{this.state.activeSound ?? '-'}</div>
-					<div className='row w-50 mx-auto'>
+			<div className='container-fluid bg-light' id='drum-machine'>
+				<div className='mx-auto p-2 mt-5'>
+					<div
+						className='mx-auto w-50 bg-secondary text-light rounded text-center text-bold font-weight-bold'
+						id='display'
+					>
+						{this.state.activeSound ?? '-'}
+					</div>
+					<div className='row w-50 mx-auto drums'>
 						{keys.flatMap((triggerKey, index) => {
 							const pad = CreatePad(triggerKey, index, this.handleClick);
-							// console.log(pad, 'p');
 
+							// every keysPerRow a div.w-100 has to be inserted
 							if (index !== 0 && index % keysPerRow === 0) {
 								return [<div className='w-100' key={`space-${index}`}></div>, pad];
 							}

@@ -37,31 +37,43 @@
 	}
 }
 
-.drum-pad {
-	background-color: green;
+#drum-machine {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+.drums {
+	background-color: rgb(173, 173, 173);
+	border-radius: 2px;
+	box-shadow: rgb(90, 90, 90) 3px 3px 5px;
 }
 
 .triggerKey {
-	background-color: red;
+	background-color: grey;
+	padding: 40px;
+	cursor: pointer;
+	box-shadow: rgb(61, 61, 61) 2px 2px 3px;
+	border-radius: 5px;
+	font-weight: bold;
 }
 
-.drum-pad:active {
+/* .drum-pad:active {
 	background-color: yellow;
-}
+} */
 
 .drum-pad:active > .triggerKey {
-	background-color: yellow;
+	background-color: rgb(170, 170, 170);
+	box-shadow: rgb(61, 61, 61) 2px 2px 3px;
 }
 
-.drum-pad-active {
+/* .drum-pad-active {
 	background-color: yellow;
-}
+} */
 
 .drum-pad-active > .triggerKey {
-	background-color: yellow;
+	background-color: rgb(195, 195, 195);
+	box-shadow: rgb(61, 61, 61) 2px 2px 3px;
 }
-
-/* #profile:hover,
-#profile:focus {
-	background: green;
-} */
